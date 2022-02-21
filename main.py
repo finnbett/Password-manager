@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import random
+import json
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -41,10 +42,15 @@ def generate_password_function():
 
 def add_password():
     # will write the data to a file,
-    f = open("data.txt", "a")
     website_txt = website.get()
     password_txt = password.get()
     user_name_txt = user_name.get()
+    new_data = {
+        website_txt: {
+            "email": user_name_txt,
+            "password": password_txt,
+        }
+    }
     data_check = True
     if len(website_txt) == 0 or len(password_txt) == 0 or len(user_name_txt) == 0:
         messagebox.showerror(title="Woops!", message="fill in all fields")
@@ -54,9 +60,20 @@ def add_password():
                                                                   f"{user_name_txt}\n "
                                                                   f"Website: {website_txt} \n Password: {password_txt}")
         if is_ok:
-            f.write(f"{website_txt} | {password_txt} | {user_name_txt}\n")
-            f.close()
-            clear_entries()
+            try:
+                with open("data.json", "r") as f:
+                    data = json.load(f)
+            except FileNotFoundError:
+                with open("data.json", "w") as f:
+                    json.dump(new_data, f, indent=4)
+            except json.decoder.JSONDecodeError:
+                with open("data.json", "w") as f:
+                    json.dump(new_data, f, indent=4)
+            else:
+                data.update(new_data)
+            finally:
+                clear_entries()
+
 
 
 def clear_entries():
