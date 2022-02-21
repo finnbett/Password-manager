@@ -1,8 +1,41 @@
 from tkinter import *
 from tkinter import messagebox
+import random
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def generate_password_function():
+    password.delete(0, END)
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = []
+
+    for char in range(nr_letters):
+        password_list.append(random.choice(letters))
+
+    for char in range(nr_symbols):
+        password_list += random.choice(symbols)
+
+    for char in range(nr_numbers):
+        password_list += random.choice(numbers)
+
+    random.shuffle(password_list)
+
+    new_password = ""
+    for char in password_list:
+        new_password += char
+
+    password.insert(0, new_password)
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
@@ -19,7 +52,7 @@ def add_password():
     if data_check:
         is_ok = messagebox.askokcancel(title=website_txt, message=f"These are the details entered: \n User name: "
                                                                   f"{user_name_txt}\n "
-                                                      f"Website: {website_txt} \n Password: {password_txt}")
+                                                                  f"Website: {website_txt} \n Password: {password_txt}")
         if is_ok:
             f.write(f"{website_txt} | {password_txt} | {user_name_txt}\n")
             f.close()
@@ -56,7 +89,7 @@ password_label = Label(text="Password:")
 password_label.grid(column=1, row=4)
 
 # buttons
-generate_password = Button(text="Generate Password")
+generate_password = Button(text="Generate Password", command=generate_password_function)
 generate_password.grid(row=4, column=3)
 add = Button(text="Add", width=36, command=add_password)
 add.grid(row=5, column=2, columnspan=2)
