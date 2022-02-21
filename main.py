@@ -90,6 +90,8 @@ def search():
             match = data[search_text]
     except KeyError:
         messagebox.showerror(title="Error", message=f"{search_text} not found!")
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message=" No data found.\n Please add entries")
     else:
         messagebox.showinfo(title=f"Match Found: {search_text}", message=f"Email: {match['email']}, \n Password: "
                                                                          f"{match['password']}")
